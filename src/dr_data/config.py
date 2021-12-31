@@ -10,6 +10,10 @@ NO_CONFIG_FILE = '`-config={path}` does not exist.'
 NO_ARGUMENTS = 'Please choose a command argument (transplant, inject, biopsy, cleanse)'
 
 TRANSPLANT_NO_SOURCE = '`--transplant` command requires `-source` argument.'
+TRANSPLANT_NO_DESTINATION = '`--transplant` sub command `-source` is a file and requires a `-destination` argument.'
+TRANSPLANT_NOT_CSV = '`--transplant` command requires `-source` argument to be CSV file type'
+TRANSPLANT_START_MESSAGE = 'Starting transplant command for {database} database!'
+TRANSPLANT_COMPLETE_MESSAGE = 'Completed transplant for {database} database!'
 
 CLEANSE_COMPLETE_MESSAGE = 'Completed cleanse for {database} database!'
 
@@ -20,3 +24,7 @@ BIOPSY_START_MESSAGE = 'Starting biopsy command for {database} database!'
 BIOPSY_COMPLETE_MESSAGE = 'Completed biopsy for {database} database! Exported file located {export_path}'
 BIOPSY_GENERATED_SCHEMA = '- Created {filename}.json schema file.'
 BIOPSY_GENERATED_INSERT_ORDER_SCHEMA = '- Generated {filename}.json insertion order schema file.'
+
+INJECT_NO_ROWS = '`--inject` command requires `-rows` argument.'
+INJECT_COMPLETE_MESSAGE = 'Completed with inject for {database} database. Totals of {rows} rows injected'
+

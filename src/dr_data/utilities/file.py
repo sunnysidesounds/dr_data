@@ -1,7 +1,11 @@
 import logging
 import json
+import string
+import csv
 import os
 from os.path import exists
+from os import listdir
+from os.path import isfile, join
 import time
 import shutil
 from dr_data.config import *
@@ -26,7 +30,7 @@ class FileUtility:
     @staticmethod
     def append_to_file(json_data, filename):
         with open(filename, 'w') as json_file:
-            json.dump(json_data, json_file,indent=4,separators=(',',': '))
+            json.dump(json_data, json_file, indent=4, separators=(',', ': '))
 
     @staticmethod
     def get_filename(name):
@@ -41,3 +45,25 @@ class FileUtility:
                   'w') as outfile:
             outfile.write(json_schema)
         return file_name
+
+    @staticmethod
+    def is_csv_file(selected_file):
+        try:
+            with open(selected_file, newline='') as csv_file:
+                start = csv_file.read(4096)
+                if not all([c in string.printable or c.isprintable() for c in start]):
+                    return False
+                dialect = csv.Sniffer().sniff(start)
+                return True
+        except csv.Error:
+            return False
+
+    @staticmethod
+    def get_directory_files(directory):
+        directory_files = dict()
+        for root, dirs, files in os.walk(os.path.abspath(directory)):
+            for file in files:
+                key = os.path.splitext(file)[0]
+                path = os.path.join(root, file)
+                directory_files[key] = path
+        return directory_files
