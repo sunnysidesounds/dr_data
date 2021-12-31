@@ -1,10 +1,8 @@
 import sys
 import logging
-import time
 import psycopg2
-from zipfile import ZipFile
 from progress.bar import Bar
-from dr_data.config import *
+from dr_data.static_strings import *
 from dr_data.utilities.file import FileUtility
 
 __author__ = AUTHOR

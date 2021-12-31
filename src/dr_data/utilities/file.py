@@ -8,7 +8,7 @@ from os import listdir
 from os.path import isfile, join
 import time
 import shutil
-from dr_data.config import *
+from dr_data.static_strings import *
 
 from dr_data import __version__
 

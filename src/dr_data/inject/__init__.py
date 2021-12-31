@@ -6,9 +6,8 @@ import pandas as pd
 import psycopg2
 import logging
 from progress.bar import Bar
-from dr_data.config import *
+from dr_data.static_strings import *
 from dr_data.randoms import Randoms
-from dr_data import __version__
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT
@@ -32,11 +31,11 @@ class Inject:
     def build_dataframe(self, columns):
         dataframe = {}
         for column in columns:
-            value = self.get_random_data_by_type(column)
+            value = self.set_data_by_type(column)
             dataframe[column['name']] = [value]
         return pd.DataFrame(dataframe)
 
-    def get_random_data_by_type(self, column):
+    def set_data_by_type(self, column):
         value = None
         # check if is_nullable is True (if False we need a value)
         if not column['is_nullable']:
@@ -56,7 +55,7 @@ class Inject:
                 elif 'PRIMARY KEY' in types:
                     value = Randoms.get_hash(25)
                 else:
-                    raise Exception("{types} needs to be implementation in get_random_data_by_type".format(types=types))
+                    raise Exception(INJECT_NEED_TO_IMPLEMENT_TYPE.format(types=types))
 
             else:
                 if column['data_type'] == 'character varying':
@@ -75,7 +74,7 @@ class Inject:
                 elif column['data_type'] == 'integer':
                     value = Randoms.get_number()
                 else:
-                    raise Exception("{types} needs to be implementation in get_random_data_by_type".format(types=column['data_type']))
+                    raise Exception(INJECT_NEED_TO_IMPLEMENT_TYPE.format(types=column['data_type']))
 
         return value
 

@@ -1,7 +1,7 @@
 import logging
 import sys
 import psycopg2
-from dr_data.config import *
+from dr_data.static_strings import *
 
 from dr_data import __version__
 

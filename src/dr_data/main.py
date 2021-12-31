@@ -3,11 +3,10 @@ import argparse
 import logging
 import sys
 import json
-from os.path import exists
 from dr_data.utilities.file import FileUtility
 from dr_data.utilities.cache import Cache
 from dr_data.utilities.db import DatabaseUtility
-from dr_data.config import *
+from dr_data.static_strings import *
 from dr_data.biopsy import Biopsy
 from dr_data.inject import Inject
 from dr_data.transplant import Transplant
@@ -28,6 +27,7 @@ class Main:
             epilog="Version: {version}".format(version=__version__))
         self.arguments = self.parse_args(args)
 
+        # setup cache and configuration
         if self.arguments.config:
             self.cache = Cache(config_path=self.arguments.config, cache_location='generated-schemas')
             self.configuration = self.load_configuration(self.arguments.config)
@@ -50,21 +50,24 @@ class Main:
 
     def parse_args(self, args):
         # transplant arguments
-        self.parser.add_argument('-t', '--transplant', help="Insert one or all CSV files to table", action='store_true')
-        self.parser.add_argument('-source', help="Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names ", type=str)
-        self.parser.add_argument('-destination', help="Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required", type=str)
+        self.parser.add_argument('-t', '--transplant', help=TRANSPLANT_ARG, action='store_true')
+        self.parser.add_argument('-source', help=TRANSPLANT_SOURCE_ARG, type=str)
+        self.parser.add_argument('-destination', help=TRANSPLANT_DESTINATION_ARG, type=str)
 
         # inject arguments
-        self.parser.add_argument('-i', '--inject', help="Inserts one or many randomly regenerated rows", action='store_true')
-        self.parser.add_argument('-rows', help="How may rows do you want to load per table in the database, default is set in configuration", type=int)
+        self.parser.add_argument('-i', '--inject', help=INJECT_ARG, action='store_true')
+        self.parser.add_argument('-rows', help=INJECT_ROW_ARG, type=int)
 
         # biopsy arguments
-        self.parser.add_argument('-b', '--biopsy', help="Explicitly exports a schema and table insertion-order JSON files", action='store_true')
-        self.parser.add_argument('-export', help="The directory PATH to export the JSON files", type=str)
+        self.parser.add_argument('-b', '--biopsy', help=BIOPSY_ARG, action='store_true')
+        self.parser.add_argument('-export', help=BIOPSY_EXPORT_ARG, type=str)
 
         # cleanse (truncate) arguments
-        self.parser.add_argument('-c', '--cleanse', help="Truncates all the values in the database", action='store_true')
-        self.parser.add_argument('-config', help="configuration file or set {env_name}=<path> env variable".format(env_name=ENV_CONFIG_NAME), type=str)
+        self.parser.add_argument('-c', '--cleanse', help=CLEANSE_ARG, action='store_true')
+
+        # config argument
+        self.parser.add_argument('-config', help=CONFIG_ARG.format(env_name=ENV_CONFIG_NAME), type=str)
+
         return self.parser.parse_args(args)
 
     def setup_logging(self):
