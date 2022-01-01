@@ -29,10 +29,8 @@ class Main:
 
         # setup cache and configuration
         if self.arguments.config:
-            self.cache = Cache(config_path=self.arguments.config, cache_location='generated-schemas')
             self.configuration = self.load_configuration(self.arguments.config)
         else:
-            self.cache = Cache(config_path=os.getenv(ENV_CONFIG_NAME), cache_location='generated-schemas')
             self.configuration = self.load_configuration(os.getenv(ENV_CONFIG_NAME))
 
         self.database_name = self.configuration['db']['database']
@@ -45,7 +43,6 @@ class Main:
             raise argparse.ArgumentTypeError(NO_CONFIG_ARGUMENT.format(env_name=ENV_CONFIG_NAME))
         if config_path:
             json_config = json.loads(FileUtility.read_file(config_path))
-            self.cache.append('config_path', config_path)
             return json_config
 
     def parse_args(self, args):
@@ -85,7 +82,7 @@ class Main:
             raise argparse.ArgumentTypeError(BIOPSY_EXPORT_NOT_EXIST.format(path=self.arguments.export))
 
         print(BIOPSY_START_MESSAGE.format(database=self.database_name))
-        self.schema_data = Biopsy(self.configuration, self.cache).execute_cmd()
+        self.schema_data = Biopsy(self.configuration).execute_cmd()
         schema_filename = "{db_name}_schema".format(db_name=self.database_name)
         insertion_order_filename = "{db_name}_biopsy_insertion_order".format(db_name=self.database_name)
 
@@ -104,13 +101,13 @@ class Main:
         if not self.arguments.rows:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
-        self.schema_data = Biopsy(self.configuration, self.cache).execute_cmd()
+        self.schema_data = Biopsy(self.configuration).execute_cmd()
         Inject(self.schema_data[1], self.configuration['db']).execute_cmd(self.arguments.rows)
         print(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
 
     def execute_transplant(self):
         print(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
-        self.schema_data = Biopsy(self.configuration, self.cache).execute_cmd()
+        self.schema_data = Biopsy(self.configuration).execute_cmd()
         transplant = Transplant(self.configuration['db'])
         if not self.arguments.source:
             sys.tracebacklimit=0

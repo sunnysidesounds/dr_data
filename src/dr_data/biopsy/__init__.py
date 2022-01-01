@@ -13,9 +13,8 @@ _logger = logging.getLogger(__name__)
 
 
 class Biopsy:
-    def __init__(self, configuration, cache):
+    def __init__(self, configuration):
         self.configuration = configuration
-        self.cache = cache
         conn_info = self.configuration['db']
 
         self.connection = psycopg2.connect(**conn_info)
@@ -50,7 +49,6 @@ class Biopsy:
             "no_foreign_key_tables": no_foreign_keys,
             "foreign_key_tables": has_foreign_keys
         }
-        self.cache.append('schema', self.schema)
         return self.schema
 
     def build_insertion_order_schema(self):
@@ -65,7 +63,6 @@ class Biopsy:
             self.insert_order += 1
             progress_bar.next()
         progress_bar.finish()
-        self.cache.append('insertion_order', self.insertion_order)
         return self.insertion_order
 
     def get_insertion_table_order(self):
