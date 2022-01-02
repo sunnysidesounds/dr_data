@@ -4,7 +4,6 @@ import logging
 import sys
 import json
 from dr_data.utilities.file import FileUtility
-from dr_data.utilities.cache import Cache
 from dr_data.utilities.db import DatabaseUtility
 from dr_data.static_strings import *
 from dr_data.biopsy import Biopsy
