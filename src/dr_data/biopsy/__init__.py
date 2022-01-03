@@ -52,6 +52,8 @@ class Biopsy:
         return self.schema
 
     def build_insertion_order_schema(self):
+        if len(self.schema) == 0:
+            self.build_schema()
         insertion_table_order = self.get_insertion_table_order()
         progress_bar = Bar('- Generating insertion order for {database}....'.format(database=self.database),
                            max=len(insertion_table_order))
