@@ -6,11 +6,11 @@
     - https://docs.pytest.org/en/stable/fixture.html
     - https://docs.pytest.org/en/stable/writing_plugins.html
 """
-
 import pytest
 import psycopg2
 import testing.postgresql
 from test_utilities import load_query
+
 
 @pytest.fixture
 def test_db():
@@ -20,4 +20,8 @@ def test_db():
     db_con.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
     query = load_query('test_sql/test_db_schema_1.sql')
     db_con.cursor().execute(query)
-    yield db_con.cursor()
+    yield {
+        "cursor": db_con.cursor(),
+        "connection": db_con,
+        "config": db_conf
+    }

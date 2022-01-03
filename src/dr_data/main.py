@@ -46,20 +46,20 @@ class Main:
 
     def parse_args(self, args):
         # transplant arguments
-        self.parser.add_argument('-t', '--transplant', help=TRANSPLANT_ARG, action='store_true')
+        self.parser.add_argument('-transplant', help=TRANSPLANT_ARG, action='store_true')
         self.parser.add_argument('-source', help=TRANSPLANT_SOURCE_ARG, type=str)
         self.parser.add_argument('-destination', help=TRANSPLANT_DESTINATION_ARG, type=str)
 
         # inject arguments
-        self.parser.add_argument('-i', '--inject', help=INJECT_ARG, action='store_true')
+        self.parser.add_argument('-inject', help=INJECT_ARG, action='store_true')
         self.parser.add_argument('-rows', help=INJECT_ROW_ARG, type=int)
 
         # biopsy arguments
-        self.parser.add_argument('-b', '--biopsy', help=BIOPSY_ARG, action='store_true')
+        self.parser.add_argument('-biopsy', help=BIOPSY_ARG, action='store_true')
         self.parser.add_argument('-export', help=BIOPSY_EXPORT_ARG, type=str)
 
         # cleanse (truncate) arguments
-        self.parser.add_argument('-c', '--cleanse', help=CLEANSE_ARG, action='store_true')
+        self.parser.add_argument('-cleanse', help=CLEANSE_ARG, action='store_true')
 
         # config argument
         self.parser.add_argument('-config', help=CONFIG_ARG.format(env_name=ENV_CONFIG_NAME), type=str)

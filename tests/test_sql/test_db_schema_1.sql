@@ -17,10 +17,10 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: digital_asset_status; Type: TYPE; Schema: public; Owner: postgres
+-- Name: foobar_data_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE public.digital_asset_status AS ENUM (
+CREATE TYPE public.foobar_data_status AS ENUM (
     'pending_review',
     'published',
     'retracted',
@@ -29,7 +29,7 @@ CREATE TYPE public.digital_asset_status AS ENUM (
 );
 
 
-ALTER TYPE public.digital_asset_status OWNER TO postgres;
+ALTER TYPE public.foobar_data_status OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -65,10 +65,10 @@ CREATE TABLE public.controlled_vocabularies (
 ALTER TABLE public.controlled_vocabularies OWNER TO postgres;
 
 --
--- Name: digital_asset_accounts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: foobar_data_accounts; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.digital_asset_accounts (
+CREATE TABLE public.foobar_data_accounts (
                                                id uuid NOT NULL,
                                                name text NOT NULL,
                                                description text,
@@ -79,20 +79,20 @@ CREATE TABLE public.digital_asset_accounts (
 );
 
 
-ALTER TABLE public.digital_asset_accounts OWNER TO postgres;
+ALTER TABLE public.foobar_data_accounts OWNER TO postgres;
 
 --
--- Name: digital_asset_instances; Type: TABLE; Schema: public; Owner: postgres
+-- Name: foobar_data_instances; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.digital_asset_instances (
+CREATE TABLE public.foobar_data_instances (
                                                 id uuid NOT NULL,
                                                 external_id text,
                                                 external_collection text,
                                                 external_status text,
                                                 download_url text NOT NULL,
                                                 details_url text,
-                                                digital_asset_id uuid,
+                                                foobar_data_id uuid,
                                                 storage_id uuid NOT NULL,
                                                 created_by text NOT NULL,
                                                 created_at timestamp with time zone NOT NULL,
@@ -101,19 +101,19 @@ CREATE TABLE public.digital_asset_instances (
 );
 
 
-ALTER TABLE public.digital_asset_instances OWNER TO postgres;
+ALTER TABLE public.foobar_data_instances OWNER TO postgres;
 
 --
--- Name: digital_assets; Type: TABLE; Schema: public; Owner: postgres
+-- Name: foobar_datas; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.digital_assets (
+CREATE TABLE public.foobar_datas (
                                        id uuid NOT NULL,
                                        name text NOT NULL,
                                        type_id uuid NOT NULL,
                                        doi text,
                                        hash text NOT NULL,
-                                       status public.digital_asset_status NOT NULL,
+                                       status public.foobar_data_status NOT NULL,
                                        end_of_life timestamp with time zone NOT NULL,
                                        use_id uuid,
                                        submission_id uuid,
@@ -124,7 +124,7 @@ CREATE TABLE public.digital_assets (
 );
 
 
-ALTER TABLE public.digital_assets OWNER TO postgres;
+ALTER TABLE public.foobar_datas OWNER TO postgres;
 
 --
 -- Name: storage_storage_use; Type: TABLE; Schema: public; Owner: postgres
@@ -187,7 +187,7 @@ ALTER TABLE public.submissions OWNER TO postgres;
 CREATE TABLE public.tag (
                             id uuid NOT NULL,
                             value text NOT NULL,
-                            digital_asset_id uuid NOT NULL,
+                            foobar_data_id uuid NOT NULL,
                             created_by text NOT NULL,
                             created_at timestamp with time zone NOT NULL,
                             updated_by text,
@@ -214,27 +214,27 @@ ALTER TABLE ONLY public.controlled_vocabularies
 
 
 --
--- Name: digital_asset_accounts pk_digital_asset_accounts; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: foobar_data_accounts pk_foobar_data_accounts; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.digital_asset_accounts
-    ADD CONSTRAINT pk_digital_asset_accounts PRIMARY KEY (id);
-
-
---
--- Name: digital_asset_instances pk_digital_asset_instances; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.digital_asset_instances
-    ADD CONSTRAINT pk_digital_asset_instances PRIMARY KEY (id);
+ALTER TABLE ONLY public.foobar_data_accounts
+    ADD CONSTRAINT pk_foobar_data_accounts PRIMARY KEY (id);
 
 
 --
--- Name: digital_assets pk_digital_assets; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: foobar_data_instances pk_foobar_data_instances; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.digital_assets
-    ADD CONSTRAINT pk_digital_assets PRIMARY KEY (id);
+ALTER TABLE ONLY public.foobar_data_instances
+    ADD CONSTRAINT pk_foobar_data_instances PRIMARY KEY (id);
+
+
+--
+-- Name: foobar_datas pk_foobar_datas; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foobar_datas
+    ADD CONSTRAINT pk_foobar_datas PRIMARY KEY (id);
 
 
 --
@@ -277,52 +277,52 @@ CREATE INDEX ix_controlled_vocabularies_name ON public.controlled_vocabularies U
 
 
 --
--- Name: ix_digital_asset_accounts_name; Type: INDEX; Schema: public; Owner: postgres
+-- Name: ix_foobar_data_accounts_name; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE UNIQUE INDEX ix_digital_asset_accounts_name ON public.digital_asset_accounts USING btree (name);
-
-
---
--- Name: ix_digital_asset_instances_digital_asset_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX ix_digital_asset_instances_digital_asset_id ON public.digital_asset_instances USING btree (digital_asset_id);
+CREATE UNIQUE INDEX ix_foobar_data_accounts_name ON public.foobar_data_accounts USING btree (name);
 
 
 --
--- Name: ix_digital_asset_instances_storage_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: ix_foobar_data_instances_foobar_data_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX ix_digital_asset_instances_storage_id ON public.digital_asset_instances USING btree (storage_id);
-
-
---
--- Name: ix_digital_assets_hash; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX ix_digital_assets_hash ON public.digital_assets USING btree (hash);
+CREATE INDEX ix_foobar_data_instances_foobar_data_id ON public.foobar_data_instances USING btree (foobar_data_id);
 
 
 --
--- Name: ix_digital_assets_submission_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: ix_foobar_data_instances_storage_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX ix_digital_assets_submission_id ON public.digital_assets USING btree (submission_id);
-
-
---
--- Name: ix_digital_assets_type_id; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX ix_digital_assets_type_id ON public.digital_assets USING btree (type_id);
+CREATE INDEX ix_foobar_data_instances_storage_id ON public.foobar_data_instances USING btree (storage_id);
 
 
 --
--- Name: ix_digital_assets_use_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: ix_foobar_datas_hash; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX ix_digital_assets_use_id ON public.digital_assets USING btree (use_id);
+CREATE UNIQUE INDEX ix_foobar_datas_hash ON public.foobar_datas USING btree (hash);
+
+
+--
+-- Name: ix_foobar_datas_submission_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_foobar_datas_submission_id ON public.foobar_datas USING btree (submission_id);
+
+
+--
+-- Name: ix_foobar_datas_type_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_foobar_datas_type_id ON public.foobar_datas USING btree (type_id);
+
+
+--
+-- Name: ix_foobar_datas_use_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_foobar_datas_use_id ON public.foobar_datas USING btree (use_id);
 
 
 --
@@ -375,50 +375,50 @@ CREATE INDEX ix_submissions_type_id ON public.submissions USING btree (type_id);
 
 
 --
--- Name: ix_tag_digital_asset_id; Type: INDEX; Schema: public; Owner: postgres
+-- Name: ix_tag_foobar_data_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX ix_tag_digital_asset_id ON public.tag USING btree (digital_asset_id);
-
-
---
--- Name: digital_asset_instances fk_digital_asset_instances_digital_assets_digital_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.digital_asset_instances
-    ADD CONSTRAINT fk_digital_asset_instances_digital_assets_digital_asset_id FOREIGN KEY (digital_asset_id) REFERENCES public.digital_assets(id) ON DELETE CASCADE;
+CREATE INDEX ix_tag_foobar_data_id ON public.tag USING btree (foobar_data_id);
 
 
 --
--- Name: digital_asset_instances fk_digital_asset_instances_storages_storage_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: foobar_data_instances fk_foobar_data_instances_foobar_datas_foobar_data_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.digital_asset_instances
-    ADD CONSTRAINT fk_digital_asset_instances_storages_storage_id FOREIGN KEY (storage_id) REFERENCES public.storages(id) ON DELETE CASCADE;
-
-
---
--- Name: digital_assets fk_digital_assets_controlled_vocabularies_type_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.digital_assets
-    ADD CONSTRAINT fk_digital_assets_controlled_vocabularies_type_id FOREIGN KEY (type_id) REFERENCES public.controlled_vocabularies(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.foobar_data_instances
+    ADD CONSTRAINT fk_foobar_data_instances_foobar_datas_foobar_data_id FOREIGN KEY (foobar_data_id) REFERENCES public.foobar_datas(id) ON DELETE CASCADE;
 
 
 --
--- Name: digital_assets fk_digital_assets_controlled_vocabularies_use_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: foobar_data_instances fk_foobar_data_instances_storages_storage_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.digital_assets
-    ADD CONSTRAINT fk_digital_assets_controlled_vocabularies_use_id FOREIGN KEY (use_id) REFERENCES public.controlled_vocabularies(id);
+ALTER TABLE ONLY public.foobar_data_instances
+    ADD CONSTRAINT fk_foobar_data_instances_storages_storage_id FOREIGN KEY (storage_id) REFERENCES public.storages(id) ON DELETE CASCADE;
 
 
 --
--- Name: digital_assets fk_digital_assets_submissions_submission_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: foobar_datas fk_foobar_datas_controlled_vocabularies_type_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.digital_assets
-    ADD CONSTRAINT fk_digital_assets_submissions_submission_id FOREIGN KEY (submission_id) REFERENCES public.submissions(id);
+ALTER TABLE ONLY public.foobar_datas
+    ADD CONSTRAINT fk_foobar_datas_controlled_vocabularies_type_id FOREIGN KEY (type_id) REFERENCES public.controlled_vocabularies(id) ON DELETE CASCADE;
+
+
+--
+-- Name: foobar_datas fk_foobar_datas_controlled_vocabularies_use_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foobar_datas
+    ADD CONSTRAINT fk_foobar_datas_controlled_vocabularies_use_id FOREIGN KEY (use_id) REFERENCES public.controlled_vocabularies(id);
+
+
+--
+-- Name: foobar_datas fk_foobar_datas_submissions_submission_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foobar_datas
+    ADD CONSTRAINT fk_foobar_datas_submissions_submission_id FOREIGN KEY (submission_id) REFERENCES public.submissions(id);
 
 
 --
@@ -446,11 +446,11 @@ ALTER TABLE ONLY public.storages
 
 
 --
--- Name: storages fk_storages_digital_asset_accounts_account_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: storages fk_storages_foobar_data_accounts_account_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.storages
-    ADD CONSTRAINT fk_storages_digital_asset_accounts_account_id FOREIGN KEY (account_id) REFERENCES public.digital_asset_accounts(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_storages_foobar_data_accounts_account_id FOREIGN KEY (account_id) REFERENCES public.foobar_data_accounts(id) ON DELETE RESTRICT;
 
 
 --
@@ -462,19 +462,19 @@ ALTER TABLE ONLY public.submissions
 
 
 --
--- Name: submissions fk_submissions_digital_asset_accounts_account_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: submissions fk_submissions_foobar_data_accounts_account_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.submissions
-    ADD CONSTRAINT fk_submissions_digital_asset_accounts_account_id FOREIGN KEY (account_id) REFERENCES public.digital_asset_accounts(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_submissions_foobar_data_accounts_account_id FOREIGN KEY (account_id) REFERENCES public.foobar_data_accounts(id) ON DELETE RESTRICT;
 
 
 --
--- Name: tag fk_tag_digital_assets_digital_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tag fk_tag_foobar_datas_foobar_data_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.tag
-    ADD CONSTRAINT fk_tag_digital_assets_digital_asset_id FOREIGN KEY (digital_asset_id) REFERENCES public.digital_assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_tag_foobar_datas_foobar_data_id FOREIGN KEY (foobar_data_id) REFERENCES public.foobar_datas(id) ON DELETE CASCADE;
 
 
 --
