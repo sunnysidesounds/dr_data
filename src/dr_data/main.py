@@ -101,7 +101,7 @@ class Main:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
         self.schema_data = Biopsy(self.configuration).execute_cmd()
-        Inject(self.schema_data[1], self.configuration['db']).execute_cmd(self.arguments.rows)
+        Inject(self.schema_data[1], self.configuration).execute_cmd(self.arguments.rows)
         print(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
 
     def execute_transplant(self):

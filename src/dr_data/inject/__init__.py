@@ -17,11 +17,13 @@ _logger = logging.getLogger(__name__)
 
 
 class Inject:
-    def __init__(self, analyzed_schema, conn_info):
+    def __init__(self, schema, configuration):
+        self.configuration = configuration
+        conn_info = self.configuration['db']
         self.connection = psycopg2.connect(**conn_info)
         self.database = conn_info['database']
         self.cursor = self.connection.cursor()
-        self.analyzed_schema = analyzed_schema
+        self.analyzed_schema = schema
 
     def execute_cmd(self, how_many):
         for key, value in self.analyzed_schema.items():
