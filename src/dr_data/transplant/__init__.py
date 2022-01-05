@@ -13,7 +13,9 @@ _logger = logging.getLogger(__name__)
 
 
 class Transplant:
-    def __init__(self, conn_info):
+    def __init__(self, configuration):
+        self.configuration = configuration
+        conn_info = self.configuration['db']
         self.connection = psycopg2.connect(**conn_info)
         self.database = conn_info['database']
         self.cursor = self.connection.cursor()

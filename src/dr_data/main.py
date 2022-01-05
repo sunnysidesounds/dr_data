@@ -107,7 +107,7 @@ class Main:
     def execute_transplant(self):
         print(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
-        transplant = Transplant(self.configuration['db'])
+        transplant = Transplant(self.configuration)
         if not self.arguments.source:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(TRANSPLANT_NO_SOURCE)
