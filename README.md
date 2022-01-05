@@ -1,20 +1,78 @@
-# dr_data
+# dr-data
 
-Add a short description here!
+```bash
+
+usage: dr-data [-h] [-transplant] [-source SOURCE] [-destination DESTINATION] [-inject] [-rows ROWS] [-biopsy] [-export EXPORT] [-cleanse] [-config CONFIG]
+
+Dr. Data is a database utility tool that can populate random data based on your schema or can import custom CSV data. See options below
+
+optional arguments:
+-h, --help            show this help message and exit
+-transplant           Insert one or all CSV files to table
+-source SOURCE        Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names
+-destination DESTINATION Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required
+-inject               Inserts one or many randomly regenerated rows
+-rows ROWS            How may rows do you want to load per table in the database, default is set in configuration
+-biopsy               Explicitly exports a schema and table insertion-order JSON files
+-export EXPORT        The directory PATH to export the JSON files
+-cleanse              Truncates all the values in the database
+-config CONFIG        configuration file or set DRDATA_CONFIG=<path> env variable
+```
+## Prerequisite
+- python 3.9.1
+
+## Install
+```bash
+git clone https://github.com/sunnysidesounds/dr-data
+cd dr-data
+python setup.py install
+dr-data -h
+```
+
+## Usage
+1. Create a `dr_data.json` file with these values and set `DRDATA_CONFIG=<path>` env variable or using `-config=<path>`  parameter
+```bash
+{
+   "db":{
+      "host":"localhost",
+      "database":"<db_name>",
+      "user":"<db_user>",
+      "password":"<db_password>"
+   }
+}
+```
+2. Then run one of the procedure commands (-inject, -transplant, -cleanse, -biopsy)
+
+## Examples
+Example 1: `-inject` random row data into the database
+```bash
+dr-data -inject -rows=100
+```
+
+Example 2: `-transplant` directory with CSV files (multiple CSV files)
+Note: CSV columns need to be named the name as the database column names. 
+```bash
+dr-data -transplant -source=/path/to/source/directory
+```
+
+Example 3: `-transplant` one CSV files (single CSV file)
+Note: CSV columns need to be named the name as the database column names.
+```bash
+dr-data -transplant -source=</path/to/source/file.csv> -destination=<table_name>
+```
+
+Example 4: `-biopsy` the database, produces a schema.json and insertion-order-schema.json files
+```bash
+dr-data -biopsy -export=</path/to/export/directory/>
+```
+
+Example 5: `-cleanse` the database of all data.
+Warning: This can't be undone.
+```bash
+dr-data -cleanse
+```
 
 
-## Description
-
-A longer description of your project goes here...
-
-
-<!-- pyscaffold-notes -->
-
-## Note
-
-This project has been set up using PyScaffold 4.1.1. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
-
-
+## Dev Note
 venv/bin/tox -e build
 venv/bin/pip install -e .
