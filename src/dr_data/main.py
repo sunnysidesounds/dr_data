@@ -17,6 +17,7 @@ __copyright__ = COPYRIGHT
 __license__ = LICENSE
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.DEBUG)
 
 
 class Main:
@@ -80,21 +81,21 @@ class Main:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(BIOPSY_EXPORT_NOT_EXIST.format(path=self.arguments.export))
 
-        print(BIOPSY_START_MESSAGE.format(database=self.database_name))
+        logging.info(BIOPSY_START_MESSAGE.format(database=self.database_name))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         schema_filename = "{db_name}_schema".format(db_name=self.database_name)
         insertion_order_filename = "{db_name}_biopsy_insertion_order".format(db_name=self.database_name)
 
         FileUtility.generate_json_file(schema_filename, self.arguments.export, self.schema_data[0])
-        print(BIOPSY_GENERATED_SCHEMA.format(filename=schema_filename))
+        logging.info(BIOPSY_GENERATED_SCHEMA.format(filename=schema_filename))
 
         FileUtility.generate_json_file(insertion_order_filename, self.arguments.export, self.schema_data[1])
-        print(BIOPSY_GENERATED_INSERT_ORDER_SCHEMA.format(filename=insertion_order_filename))
-        print(BIOPSY_COMPLETE_MESSAGE.format(database=self.database_name, export_path=self.arguments.export))
+        logging.info(BIOPSY_GENERATED_INSERT_ORDER_SCHEMA.format(filename=insertion_order_filename))
+        logging.info(BIOPSY_COMPLETE_MESSAGE.format(database=self.database_name, export_path=self.arguments.export))
 
     def execute_cleanse(self):
         self.db_util .truncate_db()
-        print(CLEANSE_COMPLETE_MESSAGE.format(database=self.database_name))
+        logging.info(CLEANSE_COMPLETE_MESSAGE.format(database=self.database_name))
 
     def execute_inject(self):
         if not self.arguments.rows:
@@ -102,10 +103,10 @@ class Main:
             raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         Inject(self.schema_data[1], self.configuration).execute_cmd(self.arguments.rows)
-        print(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
+        logging.info(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
 
     def execute_transplant(self):
-        print(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
+        logging.info(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         transplant = Transplant(self.configuration)
         if not self.arguments.source:
@@ -119,12 +120,12 @@ class Main:
             if not FileUtility.is_csv_file(self.arguments.source):
                 raise argparse.ArgumentTypeError(TRANSPLANT_NOT_CSV)
             transplant.execute_file_cmd(self.arguments.source, self.arguments.destination)
-            print(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
+            logging.info(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
             sys.exit()
 
         if os.path.isdir(self.arguments.source):
             transplant.execute_directory_cmd(self.arguments.source, self.schema_data)
-            print(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
+            logging.info(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
             sys.exit()
 
     def execute_cmd(self):
@@ -138,7 +139,7 @@ class Main:
         elif self.arguments.cleanse:
             self.execute_cleanse()
         else:
-            print(NO_ARGUMENTS + "\n")
+            logging.info(NO_ARGUMENTS + "\n")
             self.parser.print_help()
 
 

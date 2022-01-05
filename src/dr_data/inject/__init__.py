@@ -14,6 +14,7 @@ __copyright__ = COPYRIGHT
 __license__ = LICENSE
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class Inject:
@@ -104,9 +105,9 @@ class Inject:
         try:
             psql_extras.execute_values(cur, query, data_tuples, page_size=page_size)
         except Exception as error:
-            print("- {index}) FAILED query execution for:: \"{query}\" ".format(index=index, query=cur.query.decode("utf-8")))
-            print("\n")
-            print("ERROR: {error}".format(error=error))
+            logging.info("- {index}) FAILED query execution for:: \"{query}\" ".format(index=index, query=cur.query.decode("utf-8")))
+            logging.info("\n")
+            logging.info("ERROR: {error}".format(error=error))
             conn.rollback()
             cur.close()
             sys.exit()

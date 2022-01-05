@@ -10,6 +10,7 @@ __copyright__ = COPYRIGHT
 __license__ = LICENSE
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class DatabaseUtility:
@@ -35,9 +36,9 @@ class DatabaseUtility:
             $$ LANGUAGE plpgsql;""")
             self.cursor.execute("""SELECT truncate_tables('postgres');""")
         except Exception as error:
-            print("- FAILED truncating db ")
-            print("\n")
-            print("ERROR: {error}".format(error=error))
+            logging.info("- FAILED truncating db ")
+            logging.info("\n")
+            logging.info("ERROR: {error}".format(error=error))
             self.connection.rollback()
             self.cursor.close()
             sys.exit()

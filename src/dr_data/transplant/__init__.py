@@ -10,6 +10,7 @@ __copyright__ = COPYRIGHT
 __license__ = LICENSE
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class Transplant:
@@ -27,9 +28,9 @@ class Transplant:
                 self.cursor.copy_expert(sql=copy_sql, file=csv_file)
                 self.connection.commit()
             except Exception as error:
-                print("- FAILED query execution for:: \"{query}\" ".format(query=self.cursor.query.decode("utf-8")))
-                print("\n")
-                print("ERROR: {error}".format(error=error))
+                logging.info("- FAILED query execution for:: \"{query}\" ".format(query=self.cursor.query.decode("utf-8")))
+                logging.info("\n")
+                logging.info("ERROR: {error}".format(error=error))
                 self.connection.rollback()
                 self.cursor.close()
                 sys.exit()
@@ -48,4 +49,4 @@ class Transplant:
             self.execute_file_cmd(source, key)
             progress_bar.next()
         progress_bar.finish()
-        print('- Skipped tables {tables}'.format(tables=skipped_tables))
+        logging.info('- Skipped tables {tables}'.format(tables=skipped_tables))
