@@ -76,3 +76,15 @@ dr-data -cleanse
 ## Dev Note
 venv/bin/tox -e build
 venv/bin/pip install -e .
+
+1. `git commit -m "Initial Commit" . `
+2. `git tag v0.0.1`
+3. `git push origin main`
+4. `git push --tags`
+    - This will create a release package in github
+    - Check under branch dropdown, tags to find the tag you pushed.
+5. Build documentation `tox -e docs`
+6. Check version number after git push `venv/bin/python setup.py --version` --> Should be v0.0.1
+7. `tox -e build`
+8. `tox -e pushlish` Publishes to test.pypi.org
+9. Test install `pip install -i https://test.pypi.org/simple/ dr_data`

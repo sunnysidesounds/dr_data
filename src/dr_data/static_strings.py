@@ -2,7 +2,6 @@
 AUTHOR = 'Jason R Alexander'
 COPYRIGHT = 'Jason R Alexander'
 LICENSE = 'MIT'
-VERSION = 'v1.0.0'
 
 # Argument messages
 TRANSPLANT_ARG = 'Insert one or all CSV files to table'

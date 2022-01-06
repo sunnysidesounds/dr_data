@@ -8,6 +8,7 @@ import logging
 from progress.bar import Bar
 from dr_data.static_strings import *
 from dr_data.randoms import Randoms
+from dr_data.sql import Sql
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT
@@ -86,7 +87,7 @@ class Inject:
         for index in range(how_many):
             dataframe = self.build_dataframe(columns_data)
             columns = ', '.join(dataframe.columns.tolist())
-            query = """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING""".format(table_name=table_name, columns=columns)
+            query = Sql.build_populate_insert().format(table_name=table_name, columns=columns)
             self.insert_table_data(index + 1, query, self.connection, self.cursor, dataframe, how_many)
             progress_bar.next()
         progress_bar.finish()
@@ -115,9 +116,9 @@ class Inject:
             conn.commit()
 
     def get_random_row(self, columns, table):
-        self.cursor.execute("SELECT {columns} FROM {table} ORDER BY random() LIMIT 1".format(columns=columns, table=table))
+        self.cursor.execute(Sql.build_random_row().format(columns=columns, table=table))
         return self.cursor.fetchone()
 
     def get_random_row_where(self, columns, table, query):
-        self.cursor.execute("SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1".format(columns=columns, table=table, query=query))
+        self.cursor.execute(Sql.build_random_row_where().format(columns=columns, table=table, query=query))
         return self.cursor.fetchone()

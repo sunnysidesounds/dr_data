@@ -1,9 +1,8 @@
-import os
 import psycopg2
 import logging
 from progress.bar import Bar
 from dr_data.static_strings import *
-from dr_data.utilities.file import FileUtility
+from dr_data.sql import Sql
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT
@@ -68,8 +67,7 @@ class Biopsy:
         return self.insertion_order
 
     def get_insertion_table_order(self):
-        sql_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)), 'sql/get_insertion_table_order.sql')
-        query = FileUtility.read_file(sql_file)
+        query = Sql.build_insertion_table_order()
         self.cursor.execute(query)
         insertion_data = self.cursor.fetchall()
         output = []
@@ -78,8 +76,7 @@ class Biopsy:
         return output
 
     def build_tables(self, table_schema_name='public'):
-        sql_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)), 'sql/build_tables.sql')
-        query = FileUtility.read_file(sql_file).format(name=table_schema_name)
+        query = Sql.build_tables_query().format(name=table_schema_name)
         self.cursor.execute(query)
         table_data = self.cursor.fetchall()
         data = []
@@ -89,9 +86,7 @@ class Biopsy:
         return data
 
     def build_columns(self, table_name, table_schema_name='public'):
-        sql_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)), 'sql/build_columns.sql')
-        query = FileUtility.read_file(sql_file).format(schema_name=table_schema_name, table_name=table_name)
-
+        query = Sql.build_columns_query().format(schema_name=table_schema_name, table_name=table_name)
         self.cursor.execute(query)
         column_data = self.cursor.fetchall()
         column_data_list = []
@@ -136,9 +131,7 @@ class Biopsy:
         return output
 
     def get_column_constraint(self, table_name, column_name, table_schema_name='public'):
-        sql_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)), 'sql/get_column_constraint.sql')
-        query = FileUtility.read_file(sql_file).format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
-
+        query = Sql.build_column_constraints().format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
         self.cursor.execute(query)
         constraint_data = self.cursor.fetchall()
         data = dict()
@@ -152,8 +145,7 @@ class Biopsy:
         return data
 
     def get_values_from_type(self, type):
-        sql_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)), 'sql/get_values_from_type.sql')
-        query = FileUtility.read_file(sql_file).format(type=type)
+        query = Sql.build_values_from_type().format(type=type)
         self.cursor.execute(query)
         types = []
         type_data = self.cursor.fetchall()
