@@ -1,4 +1,5 @@
-# Doctor Data
+# Doctor Data (beta)
+This is a beta version of this tool. Please submit any issues [here](https://github.com/sunnysidesounds/dr_data/issues)
 
 ```bash
 
@@ -20,18 +21,13 @@ optional arguments:
 ```
 ## Prerequisite
 - python 3.9.1
+- Works currently only with PostgreSQL
 
-## Install
+## Installation 
 ```bash
-# with pip
+# with pypi
 pip install dr-data
-
-# locally
-git clone https://github.com/sunnysidesounds/dr-data
-cd dr-data
-python setup.py install
-dr-data -h
-```
+````
 
 ## Usage
 1. Create a `dr_data.json` file with these values and set `DRDATA_CONFIG=<path>` env variable or using `-config=<path>`  parameter
@@ -41,7 +37,8 @@ dr-data -h
       "host":"localhost",
       "database":"<db_name>",
       "user":"<db_user>",
-      "password":"<db_password>"
+      "password":"<db_password>",
+      "port":"5432"
    }
 }
 ```
@@ -74,6 +71,15 @@ Example 5: `-cleanse` the database of all data.
 Warning: This can't be undone.
 ```bash
 dr-data -cleanse
+```
+
+# Development Setup
+````
+git clone https://github.com/sunnysidesounds/dr_data
+cd dr_data
+python -m venv .
+venv/bin/pip install -e .
+venv/bin/dr-data -h
 ```
 
 
