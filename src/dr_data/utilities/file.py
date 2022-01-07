@@ -3,14 +3,8 @@ import json
 import string
 import csv
 import os
-from os.path import exists
-from os import listdir
-from os.path import isfile, join
 import time
-import shutil
 from dr_data.static_strings import *
-
-from dr_data import __version__
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT

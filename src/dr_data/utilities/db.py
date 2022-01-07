@@ -3,8 +3,6 @@ import sys
 import psycopg2
 from dr_data.static_strings import *
 
-from dr_data import __version__
-
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT
 __license__ = LICENSE
