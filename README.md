@@ -25,7 +25,6 @@ optional arguments:
 
 ## Installation 
 ```bash
-# with pypi
 pip install dr-data
 ````
 
@@ -74,12 +73,10 @@ dr-data -cleanse
 ```
 
 # Development Setup
-````
+```bash
 git clone https://github.com/sunnysidesounds/dr_data
 cd dr_data
 python -m venv .
 venv/bin/pip install -e .
 venv/bin/dr-data -h
 ```
-
-
