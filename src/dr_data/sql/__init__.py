@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class Sql:
 
     @staticmethod
-    def build_columns_query():
+    def build_columns_query(table_schema_name, table_name):
         return """select
         table_schema,
         table_name,
@@ -24,10 +24,10 @@ class Sql:
     from information_schema.columns
     where table_schema = '{schema_name}' and table_name = '{table_name}'
     order by table_schema, table_name, ordinal_position
-    """
+    """.format(schema_name=table_schema_name, table_name=table_name)
 
     @staticmethod
-    def build_tables_query():
+    def build_tables_query(table_schema_name):
         return """select
             table_schema,
             table_name,
@@ -35,7 +35,7 @@ class Sql:
         from information_schema.tables
         where table_schema = '{name}'
         order by table_schema, table_name
-        """
+        """.format(name=table_schema_name)
 
     @staticmethod
     def build_insertion_table_order():
@@ -86,7 +86,7 @@ class Sql:
             """
 
     @staticmethod
-    def build_column_constraints():
+    def build_column_constraints(table_schema_name, table_name, column_name):
         return """select
             coalesce(table_schema, referenced_schema) as table_schema,
             coalesce(table_name, referenced_table) as table_name,
@@ -113,26 +113,26 @@ class Sql:
         
         where constraint_schema = '{schema_name}' and table_name = '{table_name}'  and column_name = '{column_name}'
         order by table_schema, table_name, ordinal_position        
-        """
+        """.format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
 
     @staticmethod
-    def build_values_from_type():
+    def build_values_from_type(type):
         return """SELECT pg_type.typname AS enumtype,
                pg_enum.enumlabel AS enumlabel
         FROM pg_type
                  JOIN pg_enum
                       ON pg_enum.enumtypid = pg_type.oid
         WHERE pg_type.typname = '{type}'
- """
+ """.format(type=type)
 
     @staticmethod
-    def build_populate_insert():
-        return """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING"""
+    def build_populate_insert(table_name, columns):
+        return """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING""".format(table_name=table_name, columns=columns)
 
     @staticmethod
-    def build_random_row():
-        return "SELECT {columns} FROM {table} ORDER BY random() LIMIT 1"
+    def build_random_row(columns, table):
+        return "SELECT {columns} FROM {table} ORDER BY random() LIMIT 1".format(columns=columns, table=table)
 
     @staticmethod
-    def build_random_row_where():
-        return "SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1"
+    def build_random_row_where(columns, table, query):
+        return "SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1".format(columns=columns, table=table, query=query)
