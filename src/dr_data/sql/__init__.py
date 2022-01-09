@@ -1,9 +1,5 @@
-import os
-import psycopg2
 import logging
-from progress.bar import Bar
 from dr_data.static_strings import *
-from dr_data.utilities.file import FileUtility
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT

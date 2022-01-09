@@ -44,7 +44,7 @@ BIOPSY_GENERATED_SCHEMA = '- Created {filename}.json schema file.'
 BIOPSY_GENERATED_INSERT_ORDER_SCHEMA = '- Generated {filename}.json insertion order schema file.'
 
 # Inject messages
-INJECT_NO_ROWS = '`--inject` command requires `-rows` argument.'
+INJECT_NO_ROWS = '- No `-rows` argument, generating {rows} just rows.'
 INJECT_COMPLETE_MESSAGE = 'Completed with inject for {database} database. Totals of {rows} rows injected'
 INJECT_NEED_TO_IMPLEMENT_TYPE = '{types} needs to be implementation in get_random_data_by_type'
 

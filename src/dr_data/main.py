@@ -27,12 +27,12 @@ class Main:
             epilog="Version: {version}".format(version=__version__))
         self.arguments = self.parse_args(args)
 
-        # setup cache and configuration
         if self.arguments.config:
             self.configuration = self.load_configuration(self.arguments.config)
         else:
             self.configuration = self.load_configuration(os.getenv(ENV_CONFIG_NAME))
 
+        self.default_rows = self.configuration['defaults']['rows']
         self.database_name = self.configuration['db']['database']
         self.db_util = DatabaseUtility(self.configuration['db'])
         self.schema_data = None
@@ -99,8 +99,8 @@ class Main:
 
     def execute_inject(self):
         if not self.arguments.rows:
-            sys.tracebacklimit=0
-            raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
+            self.arguments.rows = self.default_rows
+            logging.info(INJECT_NO_ROWS.format(rows=self.default_rows))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         Inject(self.schema_data[1], self.configuration).execute_cmd(self.arguments.rows)
         logging.info(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))

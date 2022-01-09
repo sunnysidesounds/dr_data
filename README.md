@@ -38,7 +38,10 @@ pip install dr-data
       "user":"<db_user>",
       "password":"<db_password>",
       "port":"5432"
-   }
+   },
+   "defaults": {
+      "rows": 25
+    }
 }
 ```
 2. Then run one of the procedure commands (-inject, -transplant, -cleanse, -biopsy)
@@ -46,7 +49,8 @@ pip install dr-data
 ## Examples
 Example 1: `-inject` random row data into the database
 ```bash
-dr-data -inject -rows=100
+dr-data -inject # generates a default of 25 rows
+dr-data -inject - rows=100
 ```
 
 Example 2: `-transplant` directory with CSV files (multiple CSV files)
