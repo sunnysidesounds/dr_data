@@ -31,6 +31,7 @@ TRANSPLANT_NO_DESTINATION = '`--transplant` sub command `-source` is a file and 
 TRANSPLANT_NOT_CSV = '`--transplant` command requires `-source` argument to be CSV file type'
 TRANSPLANT_START_MESSAGE = 'Starting transplant command for {database} database!'
 TRANSPLANT_COMPLETE_MESSAGE = 'Completed transplant for {database} database!'
+TRANSPLANT_FILE_FOLDER_ERROR = 'File/directory does not exist: {file}'
 
 # Cleanse messages
 CLEANSE_COMPLETE_MESSAGE = 'Completed cleanse for {database} database!'
