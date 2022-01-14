@@ -37,6 +37,7 @@ class Transplant:
 
     def execute_directory_cmd(self, source, schema_data):
         files = FileUtility.get_directory_files(source)
+        logging.info('- Total of {count} file'.format(count=len(files)))
         insertion_order_schema = schema_data[1]
         skipped_tables = []
         progress_bar = Bar('- Importing CSVs to {database}...'.format(database=self.database), max=len(insertion_order_schema.items()))

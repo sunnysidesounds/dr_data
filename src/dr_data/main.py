@@ -114,6 +114,7 @@ class Main:
             raise argparse.ArgumentTypeError(TRANSPLANT_NO_SOURCE)
 
         if os.path.isfile(self.arguments.source):
+            logging.info('- Transplanting file {file}'.format(file=self.arguments.source))
             if not self.arguments.destination:
                 sys.tracebacklimit=0
                 raise argparse.ArgumentTypeError(TRANSPLANT_NO_DESTINATION)
@@ -124,6 +125,7 @@ class Main:
             sys.exit()
 
         if os.path.isdir(self.arguments.source):
+            logging.info('- Transplanting directory {file}'.format(file=self.arguments.source))
             transplant.execute_directory_cmd(self.arguments.source, self.schema_data)
             logging.info(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
             sys.exit()
