@@ -12,13 +12,25 @@ logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class DatabaseUtility:
-
+    """
+    Database utility class
+    """
     def __init__(self, conn_info):
+        """
+        Constructor of the DatabaseUtility
+        :param conn_info: database connection info
+        :type conn_info: dict
+        """
         self.connection = psycopg2.connect(**conn_info)
         self.database = conn_info['database']
         self.cursor = self.connection.cursor()
 
     def truncate_db(self):
+        """
+        Truncates all of the delete in the database
+        :return: None
+        :rtype: None
+        """
         try:
             self.cursor.execute("""
             CREATE OR REPLACE FUNCTION truncate_tables(username IN VARCHAR) RETURNS void AS $$
