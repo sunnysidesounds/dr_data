@@ -13,9 +13,16 @@ _logger = logging.getLogger(__name__)
 
 
 class Sql:
-
+    """
+    Class that contains all of the SQL to execute
+    """
     @staticmethod
     def build_columns_query():
+        """
+        Query that gets all columns by schema and table names
+        :return: query string
+        :rtype: str
+        """
         return """select
         table_schema,
         table_name,
@@ -32,6 +39,11 @@ class Sql:
 
     @staticmethod
     def build_tables_query():
+        """
+        Query that gets all table schema based off table schem.
+        :return: query string
+        :rtype: str
+        """
         return """select
             table_schema,
             table_name,
@@ -43,6 +55,11 @@ class Sql:
 
     @staticmethod
     def build_insertion_table_order():
+        """
+        Query that gets the insertion order of the database
+        :return: query string
+        :rtype: str
+        """
         return """WITH RECURSIVE fkeys AS (
                     SELECT conrelid AS source,
                            confrelid AS target
@@ -91,6 +108,11 @@ class Sql:
 
     @staticmethod
     def build_column_constraints():
+        """
+        Query that gets the column constraints
+        :return: query string
+        :rtype: str
+        """
         return """select
             coalesce(table_schema, referenced_schema) as table_schema,
             coalesce(table_name, referenced_table) as table_name,
@@ -121,6 +143,11 @@ class Sql:
 
     @staticmethod
     def build_values_from_type():
+        """
+        Query that gets values from type
+        :return: query string
+        :rtype: str
+        """
         return """SELECT pg_type.typname AS enumtype,
                pg_enum.enumlabel AS enumlabel
         FROM pg_type
@@ -131,12 +158,27 @@ class Sql:
 
     @staticmethod
     def build_populate_insert():
+        """
+        Query that inserts table data
+        :return: query string
+        :rtype: str
+        """
         return """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING"""
 
     @staticmethod
     def build_random_row():
+        """
+        Query that gets a random row from a table
+        :return: query string
+        :rtype: str
+        """
         return "SELECT {columns} FROM {table} ORDER BY random() LIMIT 1"
 
     @staticmethod
     def build_random_row_where():
+        """
+        Query that gets random row from a table with a where statement
+        :return: query string
+        :rtype: str
+        """
         return "SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1"
