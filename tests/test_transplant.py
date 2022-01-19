@@ -4,6 +4,13 @@ from test_utilities import load_file, load_query
 
 
 def test_transplant_execute_cmd(test_db):
+    """
+    Tests that the transplant command works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
