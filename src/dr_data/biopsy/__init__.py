@@ -12,7 +12,15 @@ _logger = logging.getLogger(__name__)
 
 
 class Biopsy:
+    """
+    Explicitly exports a schema and table insertion-order JSON files
+    """
     def __init__(self, configuration):
+        """
+        Constructor for Biopsy
+        :param configuration: configuration file
+        :type configuration: JSON
+        """
         self.configuration = configuration
         conn_info = self.configuration['db']
 
@@ -25,12 +33,24 @@ class Biopsy:
         self.insert_order = 1
 
     def execute_cmd(self):
+        """
+        Executes the biopsy command, main entry point
+        :return: tuple of db schema and insertion order schema
+        :rtype: tuple
+        """
         return (
             self.build_schema(),
             self.build_insertion_order_schema()
         )
 
     def build_schema(self, table_schema_name='public'):
+        """
+        Builds a JSON schema from the database tables and columns
+        :param table_schema_name:  The schema name, default is public
+        :type table_schema_name: str
+        :return: a dictionary of tables and columns
+        :rtype: dict
+        """
         tables = self.build_tables(table_schema_name)
         no_foreign_keys = []
         has_foreign_keys = []
@@ -51,6 +71,11 @@ class Biopsy:
         return self.schema
 
     def build_insertion_order_schema(self):
+        """
+        Builds a JSON insertion schema from the JSON schema
+        :return:  a insertion order dictionary of tables and columns
+        :rtype: dict
+        """
         if len(self.schema) == 0:
             self.build_schema()
         insertion_table_order = self.get_insertion_table_order()
@@ -67,6 +92,11 @@ class Biopsy:
         return self.insertion_order
 
     def get_insertion_table_order(self):
+        """
+        This queries the database and gets the table insertion order
+        :return: ordered insetion list of table names
+        :rtype: list[str]
+        """
         query = Sql.build_insertion_table_order()
         self.cursor.execute(query)
         insertion_data = self.cursor.fetchall()
@@ -76,6 +106,13 @@ class Biopsy:
         return output
 
     def build_tables(self, table_schema_name='public'):
+        """
+        This queries the database and gets the list of tables and related table data
+        :param table_schema_name: The schema name, default is public
+        :type table_schema_name: str
+        :return: list of tables and table schema information
+        :rtype: list[str]
+        """
         query = Sql.build_tables_query().format(name=table_schema_name)
         self.cursor.execute(query)
         table_data = self.cursor.fetchall()
@@ -86,6 +123,15 @@ class Biopsy:
         return data
 
     def build_columns(self, table_name, table_schema_name='public'):
+        """
+        This queries the database and build a list of columns per table.
+        :param table_name: Name of the table
+        :type table_name: str
+        :param table_schema_name:  The schema name, default is public
+        :type table_schema_name: str
+        :return: Dictionary of column data per table.
+        :rtype: dict
+        """
         query = Sql.build_columns_query().format(schema_name=table_schema_name, table_name=table_name)
         self.cursor.execute(query)
         column_data = self.cursor.fetchall()
@@ -131,6 +177,17 @@ class Biopsy:
         return output
 
     def get_column_constraint(self, table_name, column_name, table_schema_name='public'):
+        """
+        This queries the database getting column constraints per table.
+        :param table_name: The name of the table
+        :type table_name: str
+        :param column_name: The name of the column
+        :type column_name: str
+        :param table_schema_name: The schema name, default is public
+        :type table_schema_name: str
+        :return: Dictionary of colum constraints.
+        :rtype: dict
+        """
         query = Sql.build_column_constraints().format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
         self.cursor.execute(query)
         constraint_data = self.cursor.fetchall()
@@ -145,6 +202,13 @@ class Biopsy:
         return data
 
     def get_values_from_type(self, type):
+        """
+        This queries the database gettting the `types` from value
+        :param type: The name of the type
+        :type type: str
+        :return: List of types
+        :rtype: list[str]
+        """
         query = Sql.build_values_from_type().format(type=type)
         self.cursor.execute(query)
         types = []
