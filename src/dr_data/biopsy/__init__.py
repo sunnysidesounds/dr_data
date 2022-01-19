@@ -9,6 +9,7 @@ __copyright__ = COPYRIGHT
 __license__ = LICENSE
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class Biopsy:
