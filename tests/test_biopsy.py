@@ -15,6 +15,13 @@ expected_insertion_order_list = [
 
 
 def test_biopsy_execute_cmd(test_db):
+    """
+    Tests that the biopsy command works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -29,6 +36,13 @@ def test_biopsy_execute_cmd(test_db):
 
 
 def test_biopsy_build_schema(test_db):
+    """
+    Tests that the biopsy build schema works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -38,6 +52,13 @@ def test_biopsy_build_schema(test_db):
 
 
 def test_biopsy_build_insertion_order_schema(test_db):
+    """
+    Tests that the biopsy build insertion order schema works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -48,6 +69,13 @@ def test_biopsy_build_insertion_order_schema(test_db):
 
 
 def test_biopsy_get_insertion_table_order(test_db):
+    """
+    Tests that the biopsy get insertion order schema works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -58,6 +86,13 @@ def test_biopsy_get_insertion_table_order(test_db):
 
 
 def test_biopsy_build_tables(test_db):
+    """
+    Tests that the biopsy builds the table JSON
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -68,6 +103,13 @@ def test_biopsy_build_tables(test_db):
 
 
 def test_biopsy_build_columns(test_db):
+    """
+    Tests that the biopsy builds the table column JSON
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -78,6 +120,13 @@ def test_biopsy_build_columns(test_db):
 
 
 def test_biopsy_get_column_constraint(test_db):
+    """
+    Tests that the biopsy builds the table column constraints JSON
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -88,6 +137,13 @@ def test_biopsy_get_column_constraint(test_db):
 
 
 def test_biopsy_get_values_from_type(test_db):
+    """
+    Tests that the biopsy get a value from a specific type.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
