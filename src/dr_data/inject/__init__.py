@@ -19,20 +19,44 @@ logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class Inject:
+    """
+     Inserts one or many randomly regenerated rows
+    """
     def __init__(self, schema, configuration):
+        """
+        Constructor for Inject
+        :param schema: schema file
+        :type schema: JSON
+        :param configuration: configuration file
+        :type configuration: JSON
+        """
         self.configuration = configuration
         conn_info = self.configuration['db']
         self.connection = psycopg2.connect(**conn_info)
         self.database = conn_info['database']
         self.cursor = self.connection.cursor()
-        self.analyzed_schema = schema
+        self.insertion_schema = schema
 
     def execute_cmd(self, how_many):
-        for key, value in self.analyzed_schema.items():
+        """
+        Executes the insert command, main entry point
+        :param how_many: How many rows to insert
+        :type how_many: int
+        :return: None
+        :rtype: None
+        """
+        for key, value in self.insertion_schema.items():
             table = list(value.keys())[0]
             self.populate_table(how_many, table, value[table]['columns'])
 
     def build_dataframe(self, columns):
+        """
+        Creates panda dataframe from the list of table columns
+        :param columns: name of the column
+        :type columns: list[str]
+        :return: Panda DataFrame
+        :rtype: DataFrame
+        """
         dataframe = {}
         for column in columns:
             value = self.set_data_by_type(column)
@@ -40,6 +64,13 @@ class Inject:
         return pd.DataFrame(dataframe)
 
     def set_data_by_type(self, column):
+        """
+        This sets the value (or data) by the column type
+        :param column: column dictionary
+        :type column: dict
+        :return: value of type
+        :rtype: Any
+        """
         value = None
         # check if is_nullable is True (if False we need a value)
         if not column['is_nullable']:
@@ -83,6 +114,17 @@ class Inject:
         return value
 
     def populate_table(self, how_many, table_name, columns_data):
+        """
+        Inserts all table data into the database
+        :param how_many: The amount of rows to insert
+        :type how_many: int
+        :param table_name: The name of the table
+        :type table_name: str
+        :param columns_data: The column meta data
+        :type columns_data: dict
+        :return: None
+        :rtype: None
+        """
         progress_bar = Bar(' - building [{}] table '.format(table_name), max=how_many)
         for index in range(how_many):
             dataframe = self.build_dataframe(columns_data)
@@ -101,6 +143,23 @@ class Inject:
             df: pd.DataFrame,
             page_size: int
     ) -> None:
+        """
+        Insert table data
+        :param index: index to start
+        :type index: int
+        :param query: The query to run
+        :type query: str
+        :param conn: database connection
+        :type conn: dict
+        :param cur: database cursor
+        :type cur: dict
+        :param df: The dataframe that will be inserted
+        :type df: Dataframe
+        :param page_size: The size of the database page
+        :type page_size: int
+        :return: None
+        :rtype: None
+        """
         data_tuples = [tuple(row.to_numpy()) for index, row in df.iterrows()]
 
         try:
@@ -116,9 +175,29 @@ class Inject:
             conn.commit()
 
     def get_random_row(self, columns, table):
+        """
+        Gets a random row from a table
+        :param columns: The columns of a table
+        :type columns: dict
+        :param table: The name of the table
+        :type table:  str
+        :return: Random row from the database
+        :rtype: dict
+        """
         self.cursor.execute(Sql.build_random_row().format(columns=columns, table=table))
         return self.cursor.fetchone()
 
     def get_random_row_where(self, columns, table, query):
+        """
+        Gets a random row from a table where something equals something.
+        :param columns: The columns of a table
+        :type columns: dict
+        :param table: The name of the table
+        :type table: str
+        :param query: The execution query
+        :type query: str
+        :return: Random row from the database
+        :rtype: dict
+        """
         self.cursor.execute(Sql.build_random_row_where().format(columns=columns, table=table, query=query))
         return self.cursor.fetchone()
