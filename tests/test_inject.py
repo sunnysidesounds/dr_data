@@ -19,6 +19,13 @@ column_data = [{'name': 'id', 'data_type': 'uuid', 'column_default': None, 'is_n
 
 
 def test_inject_execute_cmd(test_db):
+    """
+    Tests that the inject command works.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -34,6 +41,13 @@ def test_inject_execute_cmd(test_db):
 
 
 def test_inject_set_data_by_type(test_db):
+    """
+    Tests if we can set data by a specific type in the database.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -57,6 +71,13 @@ def test_inject_set_data_by_type(test_db):
 
 
 def test_inject_populate_table(test_db):
+    """
+   Tests if we can populate the tables in the database.
+   :param test_db: pytest in-memory Database fixture
+   :type test_db: Pytest.fixture
+   :return: None
+   :rtype: None
+   """
     db_conf = {
         "db": test_db['config']
     }
@@ -68,6 +89,13 @@ def test_inject_populate_table(test_db):
 
 
 def test_inject_get_random_row(test_db):
+    """
+    Tests getting a random rows from a table in the database.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
@@ -81,6 +109,13 @@ def test_inject_get_random_row(test_db):
 
 
 def test_inject_get_random_row_where(test_db):
+    """
+    Tests getting a random rows from a table in the database using where statement.
+    :param test_db: pytest in-memory Database fixture
+    :type test_db: Pytest.fixture
+    :return: None
+    :rtype: None
+    """
     db_conf = {
         "db": test_db['config']
     }
