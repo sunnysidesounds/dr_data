@@ -21,7 +21,15 @@ logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.DEBUG
 
 
 class Main:
+    """
+    The main entry point class for the CLI
+    """
     def __init__(self, args):
+        """
+        Constructor for the main entry point class
+        :param args: CLI argument
+        :type args: dict
+        """
         self.parser = argparse.ArgumentParser(
             description=MAIN_DESCRIPTION,
             epilog="Version: {version}".format(version=__version__))
@@ -38,6 +46,13 @@ class Main:
         self.schema_data = None
 
     def load_configuration(self, config_path):
+        """
+        Loads the configuration file into memory.
+        :param config_path: Path to the configuration file
+        :type config_path: str
+        :return: JSON
+        :rtype: JSON
+        """
         configuration_file = os.getenv(ENV_CONFIG_NAME)
         if not config_path and not configuration_file:
             raise argparse.ArgumentTypeError(NO_CONFIG_ARGUMENT.format(env_name=ENV_CONFIG_NAME))
@@ -46,6 +61,13 @@ class Main:
             return json_config
 
     def parse_args(self, args):
+        """
+        Sets up CLI arguments and helper messages
+        :param args: Arguments to parse
+        :type args: dict
+        :return: Parser
+        :rtype: Arguments Parser
+        """
         # transplant arguments
         self.parser.add_argument('-transplant', help=TRANSPLANT_ARG, action='store_true')
         self.parser.add_argument('-source', help=TRANSPLANT_SOURCE_ARG, type=str)
@@ -68,12 +90,22 @@ class Main:
         return self.parser.parse_args(args)
 
     def setup_logging(self):
+        """
+        Sets up logging for the CLI
+        :return: None
+        :rtype: None
+        """
         log_format = "[%(asctime)s] %(levelname)s:%(name)s: %(message)s"
         logging.basicConfig(
             level=logging.INFO, stream=sys.stdout, format=log_format, datefmt="%Y-%m-%d %H:%M:%S"
         )
 
     def execute_biopsy(self):
+        """
+        Executes the biopsy command
+        :return: None
+        :rtype: None
+        """
         if not self.arguments.export:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(BIOPSY_NO_EXPORT)
@@ -94,10 +126,20 @@ class Main:
         logging.info(BIOPSY_COMPLETE_MESSAGE.format(database=self.database_name, export_path=self.arguments.export))
 
     def execute_cleanse(self):
+        """
+        Executes the cleanse command
+        :return: None
+        :rtype: None
+        """
         self.db_util .truncate_db()
         logging.info(CLEANSE_COMPLETE_MESSAGE.format(database=self.database_name))
 
     def execute_inject(self):
+        """
+        Executes the inject command
+        :return: None
+        :rtype: None
+        """
         if not self.arguments.rows:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
@@ -106,6 +148,11 @@ class Main:
         logging.info(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
 
     def execute_transplant(self):
+        """
+        Executes the transplant command
+        :return: None
+        :rtype: None
+        """
         logging.info(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         transplant = Transplant(self.configuration)
@@ -129,6 +176,11 @@ class Main:
             sys.exit()
 
     def execute_cmd(self):
+        """
+        Sets up logging and determines incoming arguments
+        :return: None
+        :rtype: None
+        """
         self.setup_logging()
         if self.arguments.transplant:
             self.execute_transplant()
@@ -144,6 +196,11 @@ class Main:
 
 
 def run():
+    """
+    Run the main entry point class
+    :return: None
+    :rtype: None
+    """
     Main(sys.argv[1:]).execute_cmd()
 
 
