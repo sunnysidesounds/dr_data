@@ -14,7 +14,15 @@ logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 class Transplant:
+    """
+    Insert one or all CSV files to table
+    """
     def __init__(self, configuration):
+        """
+        Constructor of Transplant
+        :param configuration: configuration file
+        :type configuration: JSON
+        """
         self.configuration = configuration
         conn_info = self.configuration['db']
         self.connection = psycopg2.connect(**conn_info)
@@ -22,6 +30,15 @@ class Transplant:
         self.cursor = self.connection.cursor()
 
     def execute_file_cmd(self, source, destination):
+        """
+        Executes the transplant command, main entry point for file processing
+        :param source: source file to import
+        :type source: str or list
+        :param destination: destination table
+        :type destination: str
+        :return: None
+        :rtype: None
+        """
         with open(source, 'r') as csv_file:
             copy_sql = """COPY "{table_name}" FROM stdin WITH CSV HEADER DELIMITER as ','""".format(table_name=destination)
             try:
@@ -36,6 +53,15 @@ class Transplant:
                 sys.exit()
 
     def execute_directory_cmd(self, source, schema_data):
+        """
+        Executes the transplant command, main entry point for directory processing
+        :param source: source file to import
+        :type source: str or list
+        :param destination: destination table
+        :type destination: str
+        :return: None
+        :rtype: None
+        """
         files = FileUtility.get_directory_files(source)
         insertion_order_schema = schema_data[1]
         skipped_tables = []
