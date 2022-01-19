@@ -21,7 +21,7 @@ optional arguments:
 ```
 ## Prerequisite
 - python 3.9.1
-- Works currently only with PostgreSQL
+- Works currently only with PostgreSQL 13+
 
 ## Installation 
 ```bash
@@ -43,7 +43,7 @@ pip install dr-data
 ```
 2. Then run one of the procedure commands (-inject, -transplant, -cleanse, -biopsy)
 
-## Examples
+## CLI Examples
 Example 1: `-inject` random row data into the database
 ```bash
 dr-data -inject -rows=100
@@ -70,6 +70,59 @@ Example 5: `-cleanse` the database of all data.
 Warning: This can't be undone.
 ```bash
 dr-data -cleanse
+```
+
+## SDK Examples
+Example 1: Using `Biopsy` class
+```python
+from dr_data.biopsy import Biopsy
+
+configuration = {...}
+schema= Biopsy(configuration).execute_cmd()
+```
+
+Example 2: Using `Inject` class 
+```python
+from dr_data.biopsy import Biopsy
+from dr_data.inject import Inject
+
+configuration = {...}
+rows = 25
+schema= Biopsy(configuration).execute_cmd()
+Inject(schema, configuration).execute_cmd(rows)
+```
+
+Example 3: Using `Transplant` class (file import)
+```python
+from dr_data.transplant import Transplant
+
+configuration = {...}
+source_file = "/path/to/foobar.csv"
+destination_table = "foobar"
+transplant = Transplant(configuration)
+transplant.execute_file_cmd(source_file, destination_table)
+```
+
+Example 4: Using `Transplant` class (directory import)
+```python
+from dr_data.transplant import Transplant
+
+configuration = {...}
+source_directory= "/path/to/foobar"
+transplant = Transplant(configuration)
+transplant.execute_directory_cmd(source_directory)
+```
+
+Example 5: Using `Randoms` class (optional usage)
+```python
+from dr_data.randoms import Randoms
+
+random_hash = Randoms.get_hash(10) # get random hash value
+random_datetime = Randoms.get_datetime() # get random datetime
+random_datetime_with_timezone = Randoms.get_datetime_with_timezone() # get random datetime with timezone
+random_number = Randoms.get_datetime_with_timezone() # get random number
+random_boolean = Randoms.get_boolean() # get random boolean
+...
 ```
 
 # Development Setup
