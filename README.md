@@ -50,7 +50,7 @@ pip install dr-data
 Example 1: `-inject` random row data into the database
 ```bash
 dr-data -inject # generates a default of 25 rows
-dr-data -inject - rows=100
+dr-data -inject -rows=100
 ```
 
 Example 2: `-transplant` directory with CSV files (multiple CSV files)
