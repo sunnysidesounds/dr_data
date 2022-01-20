@@ -82,7 +82,7 @@ Example 1: Using `Biopsy` class
 from dr_data.biopsy import Biopsy
 
 configuration = {...}
-schema= Biopsy(configuration).execute_cmd()
+schema = Biopsy(configuration).execute_cmd()
 ```
 
 Example 2: Using `Inject` class 
@@ -92,8 +92,9 @@ from dr_data.inject import Inject
 
 configuration = {...}
 rows = 25
-schema= Biopsy(configuration).execute_cmd()
-Inject(schema, configuration).execute_cmd(rows)
+schema = Biopsy(configuration).execute_cmd()
+inject = Inject(schema, configuration)
+inject.execute_cmd(rows)
 ```
 
 Example 3: Using `Transplant` class (file import)
@@ -126,7 +127,6 @@ random_datetime = Randoms.get_datetime() # get random datetime
 random_datetime_with_timezone = Randoms.get_datetime_with_timezone() # get random datetime with timezone
 random_number = Randoms.get_datetime_with_timezone() # get random number
 random_boolean = Randoms.get_boolean() # get random boolean
-...
 ```
 
 # Development Setup
