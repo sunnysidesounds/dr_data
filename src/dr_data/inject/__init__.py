@@ -129,7 +129,7 @@ class Inject:
         for index in range(how_many):
             dataframe = self.build_dataframe(columns_data)
             columns = ', '.join(dataframe.columns.tolist())
-            query = Sql.build_populate_insert().format(table_name=table_name, columns=columns)
+            query = Sql.build_populate_insert(table_name, columns)
             self.insert_table_data(index + 1, query, self.connection, self.cursor, dataframe, how_many)
             progress_bar.next()
         progress_bar.finish()
@@ -184,10 +184,11 @@ class Inject:
         :return: Random row from the database
         :rtype: dict
         """
-        self.cursor.execute(Sql.build_random_row().format(columns=columns, table=table))
+        self.cursor.execute(Sql.build_random_row(columns, table))
         return self.cursor.fetchone()
 
     def get_random_row_where(self, columns, table, query):
+        self.cursor.execute(Sql.build_random_row_where(columns, table, query))
         """
         Gets a random row from a table where something equals something.
         :param columns: The columns of a table

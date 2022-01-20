@@ -35,12 +35,12 @@ class Main:
             epilog="Version: {version}".format(version=__version__))
         self.arguments = self.parse_args(args)
 
-        # setup cache and configuration
         if self.arguments.config:
             self.configuration = self.load_configuration(self.arguments.config)
         else:
             self.configuration = self.load_configuration(os.getenv(ENV_CONFIG_NAME))
 
+        self.default_rows = self.configuration['defaults']['rows']
         self.database_name = self.configuration['db']['database']
         self.db_util = DatabaseUtility(self.configuration['db'])
         self.schema_data = None
@@ -141,8 +141,8 @@ class Main:
         :rtype: None
         """
         if not self.arguments.rows:
-            sys.tracebacklimit=0
-            raise argparse.ArgumentTypeError(INJECT_NO_ROWS)
+            self.arguments.rows = self.default_rows
+            logging.info(INJECT_NO_ROWS.format(rows=self.default_rows))
         self.schema_data = Biopsy(self.configuration).execute_cmd()
         Inject(self.schema_data[1], self.configuration).execute_cmd(self.arguments.rows)
         logging.info(INJECT_COMPLETE_MESSAGE.format(database=self.database_name, rows=self.arguments.rows))
@@ -154,13 +154,13 @@ class Main:
         :rtype: None
         """
         logging.info(TRANSPLANT_START_MESSAGE.format(database=self.database_name))
-        self.schema_data = Biopsy(self.configuration).execute_cmd()
-        transplant = Transplant(self.configuration)
         if not self.arguments.source:
             sys.tracebacklimit=0
             raise argparse.ArgumentTypeError(TRANSPLANT_NO_SOURCE)
+        transplant = Transplant(self.configuration)
 
         if os.path.isfile(self.arguments.source):
+            logging.info('- Transplanting file {file}'.format(file=self.arguments.source))
             if not self.arguments.destination:
                 sys.tracebacklimit=0
                 raise argparse.ArgumentTypeError(TRANSPLANT_NO_DESTINATION)
@@ -169,11 +169,15 @@ class Main:
             transplant.execute_file_cmd(self.arguments.source, self.arguments.destination)
             logging.info(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
             sys.exit()
-
-        if os.path.isdir(self.arguments.source):
+        elif os.path.isdir(self.arguments.source):
+            self.schema_data = Biopsy(self.configuration).execute_cmd()
+            logging.info('- Transplanting directory {file}'.format(file=self.arguments.source))
             transplant.execute_directory_cmd(self.arguments.source, self.schema_data)
             logging.info(TRANSPLANT_COMPLETE_MESSAGE.format(database=self.database_name))
             sys.exit()
+        else:
+            sys.tracebacklimit=0
+            raise argparse.ArgumentTypeError(TRANSPLANT_FILE_FOLDER_ERROR.format(file=self.arguments.source))
 
     def execute_cmd(self):
         """

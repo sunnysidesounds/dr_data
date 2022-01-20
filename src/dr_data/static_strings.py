@@ -8,10 +8,10 @@ TRANSPLANT_ARG = 'Insert one or all CSV files to table'
 TRANSPLANT_SOURCE_ARG = 'Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names '
 TRANSPLANT_DESTINATION_ARG = 'Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required'
 INJECT_ARG = 'Inserts one or many randomly regenerated rows'
-INJECT_ROW_ARG = 'How may rows do you want to load per table in the database, default is set in configuration'
+INJECT_ROW_ARG = 'Used in conjuction with `inject`.How may rows do you want to load per table in the database, default is set in configuration'
 BIOPSY_ARG = 'Explicitly exports a schema and table insertion-order JSON files'
-BIOPSY_EXPORT_ARG = 'The directory PATH to export the JSON files'
-CLEANSE_ARG = 'Truncates all the values in the database'
+BIOPSY_EXPORT_ARG = 'Used in conjunction with `biopsy. The directory PATH to export the JSON files'
+CLEANSE_ARG = 'Truncates all the values in the database, WARNING this will delete all data!'
 CONFIG_ARG = 'configuration file or set {env_name}=<path> env variable'
 
 # Environment
@@ -31,6 +31,7 @@ TRANSPLANT_NO_DESTINATION = '`--transplant` sub command `-source` is a file and 
 TRANSPLANT_NOT_CSV = '`--transplant` command requires `-source` argument to be CSV file type'
 TRANSPLANT_START_MESSAGE = 'Starting transplant command for {database} database!'
 TRANSPLANT_COMPLETE_MESSAGE = 'Completed transplant for {database} database!'
+TRANSPLANT_FILE_FOLDER_ERROR = 'File/directory does not exist: {file}'
 
 # Cleanse messages
 CLEANSE_COMPLETE_MESSAGE = 'Completed cleanse for {database} database!'
@@ -44,7 +45,7 @@ BIOPSY_GENERATED_SCHEMA = '- Created {filename}.json schema file.'
 BIOPSY_GENERATED_INSERT_ORDER_SCHEMA = '- Generated {filename}.json insertion order schema file.'
 
 # Inject messages
-INJECT_NO_ROWS = '`--inject` command requires `-rows` argument.'
+INJECT_NO_ROWS = '- No `-rows` argument, generating {rows} just rows.'
 INJECT_COMPLETE_MESSAGE = 'Completed with inject for {database} database. Totals of {rows} rows injected'
 INJECT_NEED_TO_IMPLEMENT_TYPE = '{types} needs to be implementation in get_random_data_by_type'
 

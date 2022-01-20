@@ -1,9 +1,5 @@
-import os
-import psycopg2
 import logging
-from progress.bar import Bar
 from dr_data.static_strings import *
-from dr_data.utilities.file import FileUtility
 
 __author__ = AUTHOR
 __copyright__ = COPYRIGHT
@@ -17,7 +13,7 @@ class Sql:
     Class that contains all of the SQL to execute
     """
     @staticmethod
-    def build_columns_query():
+    def build_columns_query(table_schema_name, table_name):
         """
         Query that gets all columns by schema and table names
         :return: query string
@@ -35,10 +31,10 @@ class Sql:
     from information_schema.columns
     where table_schema = '{schema_name}' and table_name = '{table_name}'
     order by table_schema, table_name, ordinal_position
-    """
+    """.format(schema_name=table_schema_name, table_name=table_name)
 
     @staticmethod
-    def build_tables_query():
+    def build_tables_query(table_schema_name):
         """
         Query that gets all table schema based off table schem.
         :return: query string
@@ -51,7 +47,7 @@ class Sql:
         from information_schema.tables
         where table_schema = '{name}'
         order by table_schema, table_name
-        """
+        """.format(name=table_schema_name)
 
     @staticmethod
     def build_insertion_table_order():
@@ -107,7 +103,7 @@ class Sql:
             """
 
     @staticmethod
-    def build_column_constraints():
+    def build_column_constraints(table_schema_name, table_name, column_name):
         """
         Query that gets the column constraints
         :return: query string
@@ -139,10 +135,10 @@ class Sql:
         
         where constraint_schema = '{schema_name}' and table_name = '{table_name}'  and column_name = '{column_name}'
         order by table_schema, table_name, ordinal_position        
-        """
+        """.format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
 
     @staticmethod
-    def build_values_from_type():
+    def build_values_from_type(type):
         """
         Query that gets values from type
         :return: query string
@@ -154,28 +150,28 @@ class Sql:
                  JOIN pg_enum
                       ON pg_enum.enumtypid = pg_type.oid
         WHERE pg_type.typname = '{type}'
- """
+ """.format(type=type)
 
     @staticmethod
-    def build_populate_insert():
+    def build_populate_insert(table_name, columns):
         """
-        Query that inserts table data
-        :return: query string
-        :rtype: str
-        """
-        return """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING"""
+         Query that inserts table data
+         :return: query string
+         :rtype: str
+         """
+        return """INSERT INTO "{table_name}"({columns} ) VALUES %s ON CONFLICT DO NOTHING""".format(table_name=table_name, columns=columns)
 
     @staticmethod
-    def build_random_row():
+    def build_random_row(columns, table):
         """
         Query that gets a random row from a table
         :return: query string
         :rtype: str
         """
-        return "SELECT {columns} FROM {table} ORDER BY random() LIMIT 1"
+        return "SELECT {columns} FROM {table} ORDER BY random() LIMIT 1".format(columns=columns, table=table)
 
     @staticmethod
-    def build_random_row_where():
+    def build_random_row_where(columns, table, query):
         """
         Query that gets random row from a table with a where statement
         :return: query string
