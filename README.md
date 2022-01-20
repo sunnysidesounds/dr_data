@@ -2,22 +2,22 @@
 This is a beta version of this tool. Please submit any issues [here](https://github.com/sunnysidesounds/dr_data/issues)
 
 ```bash
-
 usage: dr-data [-h] [-transplant] [-source SOURCE] [-destination DESTINATION] [-inject] [-rows ROWS] [-biopsy] [-export EXPORT] [-cleanse] [-config CONFIG]
 
 Dr. Data is a database utility tool that can populate random data based on your schema or can import custom CSV data. See options below
 
 optional arguments:
--h, --help            show this help message and exit
--transplant           Insert one or all CSV files to table
--source SOURCE        Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names
--destination DESTINATION Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required
--inject               Inserts one or many randomly regenerated rows
--rows ROWS            How may rows do you want to load per table in the database, default is set in configuration
--biopsy               Explicitly exports a schema and table insertion-order JSON files
--export EXPORT        The directory PATH to export the JSON files
--cleanse              Truncates all the values in the database
--config CONFIG        configuration file or set DRDATA_CONFIG=<path> env variable
+  -h, --help                    show this help message and exit
+  -transplant                  Insert one or all CSV files to table
+  -source SOURCE        Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names
+  -destination DESTINATION
+                                    Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required
+  -inject                         Inserts one or many randomly regenerated rows
+  -rows ROWS               Used in conjuction with `inject`.How may rows do you want to load per table in the database, default is set in configuration
+  -biopsy                       Explicitly exports a schema and table insertion-order JSON files
+  -export EXPORT        Used in conjunction with `biopsy. The directory PATH to export the JSON files
+  -cleanse                     Truncates all the values in the database, WARNING this will delete all data!
+  -config CONFIG          configuration file or set DRDATA_CONFIG=<path> env variable
 ```
 ## Prerequisite
 - python 3.9.1

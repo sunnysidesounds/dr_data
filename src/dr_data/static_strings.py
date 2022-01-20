@@ -8,10 +8,10 @@ TRANSPLANT_ARG = 'Insert one or all CSV files to table'
 TRANSPLANT_SOURCE_ARG = 'Used in conjuctions with `transplant` The CSV source file or directory. if directory, csv filenames need to match table names '
 TRANSPLANT_DESTINATION_ARG = 'Used in conjuctions with `transplant` and `source`. if `source` is a file. destination TABLE is required'
 INJECT_ARG = 'Inserts one or many randomly regenerated rows'
-INJECT_ROW_ARG = 'How may rows do you want to load per table in the database, default is set in configuration'
+INJECT_ROW_ARG = 'Used in conjuction with `inject`.How may rows do you want to load per table in the database, default is set in configuration'
 BIOPSY_ARG = 'Explicitly exports a schema and table insertion-order JSON files'
-BIOPSY_EXPORT_ARG = 'The directory PATH to export the JSON files'
-CLEANSE_ARG = 'Truncates all the values in the database'
+BIOPSY_EXPORT_ARG = 'Used in conjunction with `biopsy. The directory PATH to export the JSON files'
+CLEANSE_ARG = 'Truncates all the values in the database, WARNING this will delete all data!'
 CONFIG_ARG = 'configuration file or set {env_name}=<path> env variable'
 
 # Environment
