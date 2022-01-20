@@ -188,7 +188,7 @@ class Inject:
         return self.cursor.fetchone()
 
     def get_random_row_where(self, columns, table, query):
-        self.cursor.execute(Sql.build_random_row_where(columns, table, query))
+
         """
         Gets a random row from a table where something equals something.
         :param columns: The columns of a table
@@ -200,5 +200,5 @@ class Inject:
         :return: Random row from the database
         :rtype: dict
         """
-        self.cursor.execute(Sql.build_random_row_where().format(columns=columns, table=table, query=query))
+        self.cursor.execute(Sql.build_random_row_where(columns, table, query))
         return self.cursor.fetchone()

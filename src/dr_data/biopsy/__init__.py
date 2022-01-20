@@ -1,3 +1,4 @@
+import sys
 import psycopg2
 import logging
 from progress.bar import Bar
@@ -114,7 +115,7 @@ class Biopsy:
         :return: list of tables and table schema information
         :rtype: list[str]
         """
-        query = Sql.build_tables_query().format(name=table_schema_name)
+        query = Sql.build_tables_query(table_schema_name)
         self.cursor.execute(query)
         table_data = self.cursor.fetchall()
         data = []
@@ -133,7 +134,7 @@ class Biopsy:
         :return: Dictionary of column data per table.
         :rtype: dict
         """
-        query = Sql.build_columns_query().format(schema_name=table_schema_name, table_name=table_name)
+        query = Sql.build_columns_query(table_schema_name, table_name)
         self.cursor.execute(query)
         column_data = self.cursor.fetchall()
         column_data_list = []
@@ -189,7 +190,7 @@ class Biopsy:
         :return: Dictionary of colum constraints.
         :rtype: dict
         """
-        query = Sql.build_column_constraints().format(schema_name=table_schema_name, table_name=table_name, column_name=column_name)
+        query = Sql.build_column_constraints(table_schema_name, table_name, column_name)
         self.cursor.execute(query)
         constraint_data = self.cursor.fetchall()
         data = dict()
@@ -210,7 +211,7 @@ class Biopsy:
         :return: List of types
         :rtype: list[str]
         """
-        query = Sql.build_values_from_type().format(type=type)
+        query = Sql.build_values_from_type(type)
         self.cursor.execute(query)
         types = []
         type_data = self.cursor.fetchall()

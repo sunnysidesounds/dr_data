@@ -149,8 +149,7 @@ class Sql:
         FROM pg_type
                  JOIN pg_enum
                       ON pg_enum.enumtypid = pg_type.oid
-        WHERE pg_type.typname = '{type}'
- """.format(type=type)
+        WHERE pg_type.typname = '{type}'""".format(type=type)
 
     @staticmethod
     def build_populate_insert(table_name, columns):
@@ -177,4 +176,4 @@ class Sql:
         :return: query string
         :rtype: str
         """
-        return "SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1"
+        return "SELECT {columns} FROM {table} {query} ORDER BY random() LIMIT 1".format(columns=columns, table=table, query=query)
